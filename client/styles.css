@@ -1,0 +1,29 @@
+.block_pattern{
+   font-family: 'Courier New', Courier, monospace;
+   font-size:small;
+   font-weight:bold;
+   color: #D00;
+   border: 1px solid black;
+   padding: 2px;
+   margin: 5px;
+   width: 40%;
+}
+.block-btn-style{
+   font-family: 'Courier New', Courier, monospace;
+   font-weight:bold;
+   color:black;
+   background-color:salmon;
+   margin: 5px;
+   padding: 0px 15px;
+   line-height: 1;      
+   transition: background .3s ease;
+}
+.logo-style{
+   display: block;
+   /* margin-left: auto;  -- this will put it in the center
+      margin-right: auto;
+   */
+   margin-left: 50px;
+   width: 100px;
+   height: 100px;
+}

@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+   <head>
+      <title>Crypto Blockchain Study</title> <!-- this is what appears on the browser tab -->
+      <link rel="icon" href="favicon.png">
+      <link rel="stylesheet" href="styles.css">
+   </head>
+   <body style="background-color: #FFC">
+      Welcome to Cryptochain Socket.IO
+      <img src="logo.png" class="logo-style">
+      <a href="/">Home</a>
+      <!-- HEADER TILL THIS POINT -->
+
+      <form id="transaction-form">
+         <input name="entry-recipient" placeholder="Whom is the transfer to ?">
+         <br />
+         <input name="entry-amount" placeholder="Amount to transfer ?" type="number">
+         <br />
+         <button>Do Transaction</button>
+      </form>
+
+      <script src="/socket.io/socket.io.js"></script> <!-- for socket.io on do-transact.js -->
+      <script src="do-transact.js"></script>  
+      <!-- 
+      <script src="index.js"></script>  
+         this fails, since for this here html file, (client)index.js can't process lines like
+         'const $blockchainHelloAddress = document.querySelector('#blockchain-hello-address')'
+      -->
+   </body>
+</html>

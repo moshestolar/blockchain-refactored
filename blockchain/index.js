@@ -18,21 +18,22 @@ class Blockchain {
 
    replaceChain(chain, ForTESTSUITE_validateTransactions, onSuccess) {
       if( chain.length <= this.chain.length ) {
-         console.error('The incoming chain must be longer')
+         console.error('replaceChain error: The incoming chain must be longer')
          return
       }
       if( !Blockchain.isValidChain(chain)) {
-         console.error('The incoming chain must be valid')
+         console.error('replaceChain error: The incoming chain must be valid')
          return
       }
       if( ForTESTSUITE_validateTransactions && !this.validTransactionData({ chain })) {
-         console.error('The incoming chain has invalid transaction data')
+         console.error('replaceChain error: The incoming chain has invalid transaction data in new blocks')
          return
       }
 
       if(onSuccess) onSuccess() //call only if has been passed as an argument
-      console.log('Replacing chain with', chain)
+      //console.log('Replacing chain with', chain)
       this.chain = chain
+      console.log('replaceChain report: BLOCKCHAIN REPLACED!')
    }
 
    validTransactionData({ chain }) {
@@ -42,6 +43,21 @@ class Blockchain {
                                            // store unique values of any type, 
                                            // whether primitive values or object references.
          let rewardTransactionCount = 0
+
+         // BUG FIX. Unlike the original code, this function should NOT validate blocks already in local chain.
+         //          Such validation sure fails: sender's current balance is NOT the value it has been,
+         //          as what's recorded in previous blocks we already have in the local chain.
+         //          Therefore -
+         // Skip examining blocks that are already in the local chain!
+         let skipBlock = false
+         for(let k=1; k<this.chain.length; k++){
+            if(block.hash === this.chain[k].hash){
+               skipBlock = true
+               break;   
+            }
+         }
+         if( skipBlock )
+            continue;   // process next block of the incoming chain
 
          for (let t of block.data) {
             if (t.input.address === REWARD_INPUT.address){ // dealing with a reward transaction
@@ -73,8 +89,7 @@ class Blockchain {
                   address: t.input.address
                })
                if (t.input.amount !== trueBalance) {
-                  //console.log(`VIOLATION *** Sender's declared balance is ${t.input.amount } - calculated balance is ${trueBalance}`)
-                  console.error('Invalid input amount')
+                  console.error(`VIOLATION *** Sender's declared balance ${t.input.amount} != calculated balance ${trueBalance}`)
                   return false
                }
                if (transactionsSet.has( t )) {
@@ -85,6 +100,7 @@ class Blockchain {
                }
             }
          }
+         console.log(`Block, hash=${(block.hash.substring(0,6))}.., added to local blockchain`)
       }
       return true
    }
